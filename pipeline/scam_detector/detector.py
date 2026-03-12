@@ -18,7 +18,7 @@ class ScamDetector:
         self.strategy = strategy
         logger.info(f"Initialized ScamDetector with strategy: {self.strategy}")
 
-    def detect(self, message: str) -> Dict[str, Any]:
+    def     detect(self, message: str) -> Dict[str, Any]:
         """Runs scam detection on a single message."""
         logger.info(f"Starting detection for message length: {len(message)}")
         try:
