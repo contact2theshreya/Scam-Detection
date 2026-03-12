@@ -10,7 +10,7 @@ sys.path.append(str(project_root))
 import streamlit as st
 import pandas as pd
 from pipeline.scam_detector.detector import ScamDetector
-from evaluate import evaluate_model
+from evaluate import calculate_metrics, evaluate_model
 
 st.set_page_config(page_title="Scam Detection App", layout="wide")
 st.title("Scam Detection")
@@ -108,11 +108,11 @@ with tab2:
                                 actual_labels = df['label'].tolist()[:limit]
                                 
                                 # Simple batch processing
-                                predicted_results = detector.detect_batch(messages, batch_size=5)
+                                predicted_results = detector.detect_batch(messages)
                                 predicted_labels = [result['label'] for result in predicted_results]
                                 
                                 # Calculate results using our simple metrics
-                                results = evaluate_model(actual_labels, predicted_labels)
+                                results = calculate_metrics(actual_labels, predicted_labels)
                                 
                                 # Display results
                                 st.success("Evaluation completed!")
@@ -120,14 +120,14 @@ with tab2:
                                 # Main metrics
                                 col1, col2, col3 = st.columns(3)
                                 with col1:
-                                    st.metric("Overall Accuracy", f"{results['overall_accuracy']}%")
+                                    st.metric("Overall Accuracy", f"{results['accuracy']}%")
                                 with col2:
-                                    st.metric("Total Predictions", results['total_predictions'])
+                                    st.metric("Total Predictions", results['total'])
                                 with col3:
-                                    st.metric("Correct Predictions", results['correct_predictions'])
+                                    st.metric("Correct Predictions", results['correct'])
                                 
                                 # Summary
-                                st.info(f"**Summary:** {results['summary']}")
+                                # st.info(f"**Summary:** {results['summary']}")
                                 
                             except Exception as e:
                                 st.error(f"Error processing dataset: {str(e)}")
